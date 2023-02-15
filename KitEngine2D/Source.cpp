@@ -1,8 +1,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <SOIL/SOIL.h>
 
+#include "Texture2D.h"
 #include "Shader.h"
 
 
@@ -69,17 +69,11 @@ int main(void)
 
 
     // Creating Texture
-    GLuint textureId = SOIL_load_OGL_texture(".\\Resources\\Textures\\anime2.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+    
+    Texture2D texture(".\\Resources\\Textures\\anime2.jpg");
+    texture.Bind();
+    
     triangleShader.Bind();    
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textureId);
     triangleShader.SetInt("tex", 0);
 
     srand(time(NULL));
