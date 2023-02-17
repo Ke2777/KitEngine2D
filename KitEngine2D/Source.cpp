@@ -2,8 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "Texture2D.h"
-#include "Shader.h"
+#include "Sprite.h"
 
 
 int main(void)
@@ -33,50 +32,9 @@ int main(void)
     }
     fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
-    float triangle[] = 
-    {
-      0.5f, 0.5f, 1.0f, 1.0f,        
-      0.5f, -0.5f, 1.0f, 0.0f,
-     -0.5f, -0.5f, 0.0f, 0.0f,
-     -0.5f, 0.5f, 0.0f, 1.0f,
-    };
-
-    unsigned int indices[] = {
-    0, 1, 3, // First triangle
-    1, 2, 3  // Second triangle
-    };
-
-
-
-    GLuint VBO;
-    GLuint EBO;
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //Index array
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    Shader triangleShader(".\\Resources\\Shaders\\Triangle_Vertex.glsl", ".\\Resources\\Shaders\\Triangle_Fragment.glsl");
-
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(float)));
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-
-
-    // Creating Texture
-    
-    Texture2D texture(".\\Resources\\Textures\\anime2.jpg");
-    texture.Bind();
-    
-    triangleShader.Bind();    
-    triangleShader.SetInt("tex", 0);
-
-    srand(time(NULL));
+    auto firstShader = std::make_shared<Shader>(".\\Resources\\Shaders\\Triangle_Vertex.glsl", ".\\Resources\\Shaders\\Triangle_Fragment.glsl");
+    Sprite firstSprite(".\\Resources\\Textures\\anime2.jpg");
+    firstSprite.SetShader(firstShader);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -85,15 +43,7 @@ int main(void)
 
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
-
-        float r = (float)rand() / (float)(RAND_MAX / 1);
-        float g = (float)rand() / (float)(RAND_MAX / 1);
-        float b = (float)rand() / (float)(RAND_MAX / 1);
-        float a = 1;
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        firstSprite.Render();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
