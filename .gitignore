@@ -6,7 +6,7 @@ ehthumbs.db
 ehthumbs_vista.db
 
 #exceptions
-!External/
+!External/*
 
 # Dump file
 *.stackdump
