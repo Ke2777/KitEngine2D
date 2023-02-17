@@ -1046,5 +1046,6 @@ dkms.conf
 
 #exceptions
 !External/Lib/*.lib
-External/Bin/
+!External/Bin/
+External/Bin/*
 !External/Bin/*.dll
