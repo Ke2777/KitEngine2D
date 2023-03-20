@@ -2,7 +2,13 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include <entt/entt.hpp>
 #include "Sprite.h"
+#include "InputManager.h"
+#include "Components.h"
+#include "ShaderSystem.h"
+#include "RenderSystem.h"
+#include "SpriteSystem.h"
 
 
 int main(void)
@@ -32,24 +38,53 @@ int main(void)
     }
     fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
-    auto firstShader = std::make_shared<Shader>(".\\Resources\\Shaders\\Triangle_Vertex.glsl", ".\\Resources\\Shaders\\Triangle_Fragment.glsl");
-    Sprite firstSprite(".\\Resources\\Textures\\anime2.jpg");
-    firstSprite.SetShader(firstShader);
+    //auto firstShader = std::make_shared<Shader>(".\\Resources\\Shaders\\Triangle_Vertex.glsl", ".\\Resources\\Shaders\\Triangle_Fragment.glsl");
+    //Sprite firstSprite(".\\Resources\\Textures\\anime2.jpg");
+    //firstSprite.SetShader(firstShader);
+
+    InputManager &inputManager = InputManager::getInstance(window);
+
+    entt::registry registry;
+
+    auto entity = registry.create();
+    registry.emplace<SpriteComponent>(entity, ".\\Resources\\Textures\\anime2.jpg");
+    registry.emplace<ShaderComponent>(entity, ".\\Resources\\Shaders\\Triangle_Vertex.glsl", ".\\Resources\\Shaders\\Triangle_Fragment.glsl");
+
+    ShaderSystem shaderSystem;
+    shaderSystem.Update(registry, 1);
+    SpriteSystem spriteSystem;
+    spriteSystem.Update(registry, 1);    
+    RenderSystem renderSystem;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        inputManager.update();
+        
         glClearColor(0,1,0,1);
 
+        if (inputManager.IsKeyDown(KeyCode::A))
+        {
+            std::cout << "Pressed A";
+        }        
+        
+        if (inputManager.IsMouseButtonPressed(MouseCode::MOUSE_BUTTON_4))
+        {
+            std::cout << "Pressed Mouse 4";
+        }
+
+        std::cout << inputManager.GetMousePosition().x << std::endl;
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
-        firstSprite.Render();
+ //       firstSprite.Render();
+        renderSystem.Update(registry, 1);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
         /* Poll for and process events */
         glfwPollEvents();
+        
     }
 
     glfwTerminate();
