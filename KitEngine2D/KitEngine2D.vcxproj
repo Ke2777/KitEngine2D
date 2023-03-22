@@ -166,10 +166,6 @@ xcopy "$(SolutionDir)KitEngine2D\External\Bin*.dll" "$(SolutionDir)$(Platform)$(
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\x64\Debug\Resources\Shaders\Triangle_Fragment.glsl" />
-    <None Include="..\x64\Debug\Resources\Shaders\Triangle_Vertex.glsl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

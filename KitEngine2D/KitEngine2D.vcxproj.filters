@@ -84,12 +84,4 @@
       <Filter>Файлы заголовков\Systems</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\x64\Debug\Resources\Shaders\Triangle_Fragment.glsl">
-      <Filter>Файлы ресурсов\Shaders</Filter>
-    </None>
-    <None Include="..\x64\Debug\Resources\Shaders\Triangle_Vertex.glsl">
-      <Filter>Файлы ресурсов\Shaders</Filter>
-    </None>
-  </ItemGroup>
 </Project>

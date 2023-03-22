@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <GL/glew.h>
@@ -7,15 +8,15 @@
 struct TransformComponent {
     glm::vec2 position;
     glm::vec2 scale;
-    float rotation;
+    float rotation;  // Поворот в градусах
 
     TransformComponent(glm::vec2 position = glm::vec2(0.0f), glm::vec2 scale = glm::vec2(1.0f), float rotation = 0.0f)
         : position(position), scale(scale), rotation(rotation) {}
 
-    glm::mat4 getMatrix() const {
+    glm::mat4 Transform() const {
         glm::mat4 matrix(1.0f);
         matrix = glm::translate(matrix, glm::vec3(position, 0.0f));
-        matrix = glm::rotate(matrix, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+        matrix = glm::rotate(matrix, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
         matrix = glm::scale(matrix, glm::vec3(scale, 1.0f));
         return matrix;
     }
@@ -102,6 +103,13 @@ struct ShaderComponent {
    {
        GLint location = GetLocation(name);
        glUniform1i(location, value);
+   }
+
+   void SetMatrix4(const std::string& name, const glm::mat4& value)
+   {
+        auto location = GetLocation(name);
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
+        std::cout << "x:" << value[3].x;
    }
 
 };

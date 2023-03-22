@@ -27,6 +27,11 @@ int main(void)
         return -1;
     }
 
+    glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) 
+    {
+        glViewport(0, 0, width, height);
+    });
+
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
@@ -49,13 +54,14 @@ int main(void)
     auto entity = registry.create();
     registry.emplace<SpriteComponent>(entity, ".\\Resources\\Textures\\anime2.jpg");
     registry.emplace<ShaderComponent>(entity, ".\\Resources\\Shaders\\Triangle_Vertex.glsl", ".\\Resources\\Shaders\\Triangle_Fragment.glsl");
+    auto& transformComponent = registry.emplace<TransformComponent>(entity);
 
     ShaderSystem shaderSystem;
     shaderSystem.Update(registry, 1);
     SpriteSystem spriteSystem;
     spriteSystem.Update(registry, 1);    
     RenderSystem renderSystem;
-
+  
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -70,14 +76,21 @@ int main(void)
         
         if (inputManager.IsMouseButtonPressed(MouseCode::MOUSE_BUTTON_4))
         {
-            std::cout << "Pressed Mouse 4";
+            //std::cout << "Pressed Mouse 4";
+            transformComponent.scale += 0.005f;
         }
 
-        std::cout << inputManager.GetMousePosition().x << std::endl;
+        if (inputManager.IsMouseButtonPressed(MouseCode::MOUSE_BUTTON_5))
+        {
+            //std::cout << "Pressed Mouse 4";
+            transformComponent.scale -= 0.005f;
+        }
+
+      // std::cout << inputManager.GetMousePosition().x << std::endl;
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
  //       firstSprite.Render();
-        renderSystem.Update(registry, 1);
+        renderSystem.Update(registry, 0);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
