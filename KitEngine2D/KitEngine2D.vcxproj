@@ -147,6 +147,7 @@ xcopy "$(SolutionDir)KitEngine2D\External\Bin*.dll" "$(SolutionDir)$(Platform)$(
   <ItemGroup>
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderSystem.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -156,9 +157,11 @@ xcopy "$(SolutionDir)KitEngine2D\External\Bin*.dll" "$(SolutionDir)$(Platform)$(
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="ISystem.h" />
     <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderSystem.h" />
     <ClInclude Include="Sprite.h" />

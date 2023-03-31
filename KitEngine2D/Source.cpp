@@ -1,9 +1,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <memory>
 
 #include <entt/entt.hpp>
 #include "Sprite.h"
+#include "Scene.h"
+#include "Entity.h"
 #include "InputManager.h"
 #include "Components.h"
 #include "ShaderSystem.h"
@@ -49,19 +52,13 @@ int main(void)
 
     InputManager &inputManager = InputManager::getInstance(window);
 
-    entt::registry registry;
+    auto scene = std::make_unique<Scene>(); 
+    Entity& entity = scene -> CreateEntity();
+    auto& transformComponent = entity.GetComponent<TransformComponent>();
 
-    auto entity = registry.create();
-    registry.emplace<SpriteComponent>(entity, ".\\Resources\\Textures\\anime2.jpg");
-    registry.emplace<ShaderComponent>(entity, ".\\Resources\\Shaders\\Triangle_Vertex.glsl", ".\\Resources\\Shaders\\Triangle_Fragment.glsl");
-    auto& transformComponent = registry.emplace<TransformComponent>(entity);
-
-    ShaderSystem shaderSystem;
-    shaderSystem.Update(registry, 1);
-    SpriteSystem spriteSystem;
-    spriteSystem.Update(registry, 1);    
-    RenderSystem renderSystem;
-  
+    entity.AddComponent<ShaderComponent>(".\\Resources\\Shaders\\Triangle_Vertex.glsl", ".\\Resources\\Shaders\\Triangle_Fragment.glsl");
+    entity.AddComponent<SpriteComponent>(".\\Resources\\Textures\\anime2.jpg");
+ 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -90,7 +87,7 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
  //       firstSprite.Render();
-        renderSystem.Update(registry, 0);
+        scene -> Update(123);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
